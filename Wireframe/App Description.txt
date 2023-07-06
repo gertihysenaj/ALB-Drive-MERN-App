@@ -1,0 +1,45 @@
+
+////////////////
+English:   /////
+////////////////
+
+
+Description:
+My personal MERN Project is a dynamic Car Rental App that 
+revolutionizes the way people rent cars.
+
+
+Features:
+
+Our feature-rich MERN Car Rental App offers a variety of functionalities to enhance the user experience. Some of the key features we have implemented include:
+
+
+1) User Authentication: Users can create an account and log in securely to access personalized features and bookings.
+
+2) Form Validations: We have implemented robust form validations to ensure that user inputs are accurate and complete.
+
+3) JWT Cookies: We use JSON Web Tokens (JWT) and cookies for secure authentication and authorization processes.
+
+4) Private Routing: Certain routes and pages are protected and can only be accessed by authenticated users.
+
+5) Admin Middleware: We have implemented middleware specifically for admin users to manage and control access to administrative functionalities.
+
+6) CRUD Operations on Cars (Admin Only): Admin users have the ability to perform Create, Read, Update, and Delete operations on car listings.
+
+7) Stripe API Integration: We have integrated the Stripe payment gateway to facilitate secure and seamless online payments for car bookings.
+
+8) Translation with initReactI18next: Our app supports multilingual capabilities, allowing users to switch between different languages for a localized experience.
+
+9) Image Uploader with Multer: We have implemented an image uploader functionality using Multer, enabling users to upload and display car images efficiently.
+
+10) Bootstrap CSS and SCSS Styling: Our MERN Car Rental App features stylish design using Bootstrap CSS and SCSS, providing a visually appealing and consistent interface.
+
+11) Mobile-Responsive Design: The app is optimized for mobile devices, ensuring a seamless user experience across different screen sizes and resolutions.
+
+
+These features combine to provide a comprehensive and user-friendly car rental experience, ensuring convenience, security, and efficient management of car bookings and reservations.
+
+Creator:
+Gerti Hysenaj
+
+Github Link:
