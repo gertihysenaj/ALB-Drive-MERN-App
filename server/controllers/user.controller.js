@@ -94,6 +94,7 @@ exports.login = async (req, res) => {
       });
     });
   } catch (err) {
+    // console.error('Error signing token: ', err);
     res.status(500).json({ msg: 'Server error' });
   }
 };

@@ -37,18 +37,22 @@ paymentRoutes(app);
 
 // Verifikime nqs User eshte i authentifikuar cookies-token
 app.get('/api/verify', (req, res) => {
+  console.log("Verifying...");
   const token = req.cookies.token;
+  console.log("Token from cookies: ", token);
   if (!token) return res.json({ isLoggedIn: false });
 
   jwt.verify(token, jwtSecret, (err, decodedPayload) => {
+    console.log("Decoded payload: ", decodedPayload);
     if (err) return res.json({ isLoggedIn: false });
 
-    // user is authenticated
-    // decodedPayload contains the data you added when issuing the token
-    // Check if decodedPayload has the user object
     if (decodedPayload && decodedPayload.user) {
       const userId = decodedPayload.user.id;
-      const user = { id: userId };
+      const user = {
+        id: decodedPayload.user.id,
+        firstName: decodedPayload.user.firstName,
+        lastName: decodedPayload.user.lastName
+      };
       res.json({ isLoggedIn: true, user, isAdmin: decodedPayload.user.isAdmin });
     } else {
       return res.json({ isLoggedIn: false });
