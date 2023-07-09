@@ -1,42 +1,25 @@
-import { Link, useNavigate,  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useState, useEffect } from "react";
 import Logo from "../images/logo/logo.png";
 import LanguageSwitcher from './LanguageSwitcher';
 
-
-function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser }) {
+function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser, isAdmin, handleLogout }) {
   const [nav, setNav] = useState(false);
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-
-
 
   const openNav = () => {
     setNav(!nav);
   };
 
-
-  const handleLogoutClick = async () => {
-    try {
-      const res = await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
-      if (res.status === 200) {
-        setIsLoggedIn(false);
-        setUser(null);
-        navigate('/login');
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  const onLogoutClick = () => {
+    handleLogout(() => navigate('/login'));
   };
-
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-
-
-
 
   return (
     <>
@@ -78,29 +61,23 @@ function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser }) {
               </Link>
             </li>
             {isLoggedIn && user ? (
-              <>
-                <li onClick={toggleDropdown}>
-                  Profile
-                  {showDropdown && (
-                    <ul>
-                      <li>
-                        <div>
-                          <span>Logged in as </span>
-                          <span>
-                            {user.firstName} {user.lastName}
-                            {user.isAdmin && <span>(Admin)</span>}
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        <Link onClick={handleLogoutClick} to="/login">
-                          Logout
-                        </Link>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              </>
+              <div className="dropdown">
+                <button onClick={toggleDropdown} className="dropdown-button">Profile</button>
+                {showDropdown && (
+                  <div className="dropdown-content">
+                    <div>
+                      <span>Logged in as </span>
+                      <span>
+                        {user.firstName} {user.lastName}
+                        {isAdmin && <span>(Admin)</span>}
+                      </span>
+                    </div>
+                    <Link onClick={onLogoutClick} className="logout">
+                      Logout
+                    </Link>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <li>
@@ -116,7 +93,7 @@ function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser }) {
               </>
             )}
           </ul>
-          
+
         </div>
 
         {/* desktop */}
@@ -165,37 +142,37 @@ function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser }) {
             </li>
           </ul>
           <div className="navbar__buttons">
-         
-        {isLoggedIn && user ? (
-          <div className="dropdown">
-            <button onClick={toggleDropdown} className="dropdown-button">Profile</button>
-            {showDropdown && (
-              <div className="dropdown-content">
-                <div>
-                  <span>Logged in as </span>
-                  <span>
-                    {user.firstName} {user.lastName}
-                    {user.isAdmin && <span>(Admin)</span>}
-                  </span>
-                </div>
-                <Link onClick={handleLogoutClick} className="logout">
-                  Logout
-                </Link>
+
+            {isLoggedIn && user ? (
+              <div className="dropdown">
+                <button onClick={toggleDropdown} className="dropdown-button">Profile</button>
+                {showDropdown && (
+                  <div className="dropdown-content">
+                    <div>
+                      <span>Logged in as </span>
+                      <span>
+                        {user.firstName} {user.lastName}
+                        {isAdmin && <span>(Admin)</span>}
+                      </span>
+                    </div>
+                    <Link onClick={onLogoutClick} className="logout">
+                      Logout
+                    </Link>
+                  </div>
+                )}
               </div>
+            ) : (
+              <>
+                <Link className="navbar__buttons__sign-in" to="/login">
+                  Sign In
+                </Link>
+                <Link className="navbar__buttons__register" to="/register">
+                  Register
+                </Link>
+                <LanguageSwitcher />
+              </>
             )}
           </div>
-        ) : (
-          <>
-            <Link className="navbar__buttons__sign-in" to="/login">
-              Sign In
-            </Link>
-            <Link className="navbar__buttons__register" to="/register">
-              Register
-            </Link>
-            <LanguageSwitcher /> 
-          </>
-        )}
-      </div>
 
           {/* mobile */}
           <div className="mobile-hamb" onClick={openNav}>

@@ -76,7 +76,7 @@ function CarBox({ carID }) {
               </div>
             </div>
             {/* btn cta */}
-            <button className="cta-btn" onClick={() => navigate('/book/' + car._id)}>
+            <button className="cta-btn" onClick={() => navigate('/book/' + car._id, { state: { car } })}>
                 Reserve a Car
               </button>
           </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './components/Navbar';
@@ -18,77 +19,79 @@ import Banner from './components/Banner';
 import './dist/styles.css';
 import i18n from 'i18next';
 
+axios.defaults.withCredentials = true;
+
+
+
+
+function AdminRoute({children, isAdmin}) {
+  return isAdmin ? children : <Navigate to="/login" replace />
+}
+
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState(null);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [loading, setLoading] = React.useState(true); 
 
-  React.useEffect(() => {
+
     const checkUserStatus = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/verify', {
-          withCredentials: true
-        });
-        if (res.status === 200) {
+        const res = await axios.get('http://localhost:8000/api/verify', {withCredentials: true});
+  
+        if (res.status === 200 && res.data.isLoggedIn) {
           setIsLoggedIn(true);
+          setIsAdmin(res.data.isAdmin);
           setUser(res.data.user);
         }
+        setLoading(false);
       } catch (err) {
         console.error(err);
+        setLoading(false);
       }
     };
 
-    checkUserStatus();
-  }, []);
+    useEffect(() => {
+      checkUserStatus();
+    }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = async (onLogout) => {
     try {
-      const res = await axios.post(
-        'http://localhost:8000/api/logout',
-        {},
-        { withCredentials: true }
-      );
+      const res = await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
 
       if (res.status === 200) {
         setIsLoggedIn(false);
+        setIsAdmin(false);
         setUser(null);
+        onLogout();
       }
     } catch (err) {
       console.error(err);
     }
   };
 
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <BrowserRouter>
-      <LanguageSwitcher />
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        user={user}
-        handleLogout={handleLogout}
-        setIsLoggedIn={setIsLoggedIn}
-        setUser={setUser}
-      />
+      <Navbar isLoggedIn={isLoggedIn} user={user} isAdmin={isAdmin} handleLogout={handleLogout} setIsLoggedIn={setIsLoggedIn} setUser={setUser} setIsAdmin={setIsAdmin}  />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
-        <Route path="models" element={<Models />} />
-        <Route
-          path="/create-car"
-          element={user && user.isAdmin ? <CarForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/edit-car/:id"
-          element={user && user.isAdmin ? <EditCar /> : <Navigate to="/login" />}
-        />
+        <Route path="models" element={<Models isAdmin={isAdmin} />} />
+        <Route path="/create-car" element={<AdminRoute isAdmin={isAdmin}><CarForm /></AdminRoute>} />
+        <Route path="/edit-car/:id" element={<AdminRoute isAdmin={isAdmin}><EditCar /></AdminRoute>} />
         <Route path="/book/:carID" element={<BookCarPage />} />
         <Route path="testimonials" element={<TestimonialsPage />} />
         <Route path="team" element={<Team />} />
         <Route path="contact" element={<Contact />} />
-        <Route
-          path="login"
-          element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
-        />
+        <Route path="login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} checkUserStatus={checkUserStatus}/>} />
         <Route path="register" element={<Register />} />
-        {/* Add the route for the Banner component */}
         <Route path="banner" element={<Banner />} />
       </Routes>
     </BrowserRouter>
@@ -96,5 +99,3 @@ function App() {
 }
 
 export default App;
-
-

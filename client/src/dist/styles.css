@@ -1123,10 +1123,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin: 0 auto; 
 }
 .banner-content__text h2 {
   font-size: 5.2rem;
   line-height: 1.3;
+  
 }
 @media (max-width: 550px) {
   .banner-content__text h2 {

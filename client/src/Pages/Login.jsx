@@ -10,7 +10,7 @@ import loginImage from '../images/login/logo-img.jpg';
 
 
 
-function Login({ setIsLoggedIn, setUser }) {  // 
+function Login({ setIsLoggedIn, setUser, checkUserStatus  }) {  // 
 
   const navigate = useNavigate();
   const [loginState, setLoginState] = useState({ email: '', password: '' });
@@ -22,11 +22,15 @@ function Login({ setIsLoggedIn, setUser }) {  //
       .then(response => {
         const user = response.data.user;
         console.log(user)
-        // const token = response.data.token;
+        const token = response.data.token;
 
 
         setIsLoggedIn(true);
         setUser(user);
+
+        (async () => {
+          await checkUserStatus(); 
+        })();
 
         setLoginMessage(response.data.msg);
         setTimeout(() => {

@@ -8,10 +8,14 @@ import Faq from "../components/Faq";
 import Footer from "../components/Footer";
 
 function Home() {
+
+
+
+  
   return (
     <>
       <Hero />
-      <BookCar />
+      {/* <BookCar /> */}
       <PlanTrip />
       <PickCar />
       <Banner />
