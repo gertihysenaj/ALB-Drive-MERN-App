@@ -23,9 +23,11 @@ const BookCar = () => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zipcode, setZipCode] = useState("");
+  const [user, setUser] = useState(null);
+
 
   const { carID } = useParams();
-  console.log(carID);
+  // console.log(carID);
 
   useEffect(() => {
     axios.get(`http://localhost:8000/api/cars/${carID}`, { withCredentials: true })
@@ -35,6 +37,34 @@ const BookCar = () => {
       })
       .catch((err) => console.error(err));
   }, [carID]);
+  
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Call to the new endpoint that verifies the token and returns the user data.
+        const response = await axios.get('http://localhost:8000/api/verify', {
+          withCredentials: true,
+        });
+  
+        // Check if the response includes user data.
+        if (response.data.isLoggedIn) {
+          console.log(response.data.user)
+          const user = response.data.user;
+          setUser(user);
+          setName(user.firstName);
+          setLastName(user.lastName);
+          setEmail(user.email);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  
+    fetchUser();
+  }, []);
+  
+  
 
   const openModal = (e) => {
     e.preventDefault();
@@ -63,22 +93,15 @@ const BookCar = () => {
   const confirmBooking = async (e) => {
     e.preventDefault();
   
-    const userToken = Cookies.get('token');
-  
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
-  
-    const decodedToken = jwtDecode(userToken);
-    const userId = decodedToken.user.id;
-  
-    if (!selectedCar) {
-      console.log('Selected car is not available. Aborting booking.');
+    if (!selectedCar || !user) {
+      console.log('Selected car or user data is not available. Aborting booking.');
       return;
     }
   
     const totalPrice = selectedCar.price;
   
     const bookingDetails = {
-      userId: userId,
+      userId: user.id,
       carId: selectedCar._id,
       totalPrice: totalPrice,
       carType: carType,
@@ -116,6 +139,7 @@ const BookCar = () => {
       alert('An error occurred while confirming the booking');
     }
   };
+  
 
   return (
     <>
@@ -146,7 +170,7 @@ const BookCar = () => {
         </div>
       </section>
       {modal && selectedCar &&(
-          console.log(`Image URL: http://localhost:8000/${selectedCar.img.replace('\\', '/')}`),
+          // console.log(`Image URL: http://localhost:8000/${selectedCar.img.replace('\\', '/')}`),
 
         <BookingModal
           carType={carType}

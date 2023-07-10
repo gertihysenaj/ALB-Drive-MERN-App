@@ -5,7 +5,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Models({ isAdmin }) {
+function Models({ isAdmin, carID }) {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
 
@@ -78,18 +78,21 @@ function Models({ isAdmin }) {
                       </span>
                     </div>
                     <div className="models-div__box__descr__name-price__btn">
-                      <Link to={`/book/${car._id}`} onClick={() => navigate(`/book/${car._id}`)}>
+                      {/* <Link to={`/book/${car._id}`} onClick={() => navigate('/book/' + car._id, { state: { car } })}>
                         Reservo mjetin
-                      </Link>
+                      </Link> */}
+                      <button onClick={() => navigate('/book/' + car._id, { state: { car } })} className="button-link">
+                        Reserve a Car
+                      </button>
                     </div>
                   </div>
                 </div>
                 {isAdmin && (
-                <>
-                  <button onClick={() => handleEdit(car._id)}>Edit</button>
-                  <button onClick={() => handleDelete(car._id)}>Delete</button>
-                </>
-              )}
+                  <>
+                    <button onClick={() => handleEdit(car._id)}>Edit</button>
+                    <button onClick={() => handleDelete(car._id)}>Delete</button>
+                  </>
+                )}
               </div>
             ))}
           </div>

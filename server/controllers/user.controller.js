@@ -80,7 +80,8 @@ exports.login = async (req, res) => {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
-        isAdmin: user.isAdmin
+        isAdmin: user.isAdmin,
+        email: user.email
       },
     };
 
@@ -89,7 +90,7 @@ exports.login = async (req, res) => {
       res.cookie('token', token, { httpOnly: true, maxAge: 3600000, path: '/', sameSite: 'strict', secure: false });
       res.json({
         msg: 'Logged in successfully. Redirecting to the Home Page in 3 seconds...',
-        user: { firstName: user.firstName, lastName: user.lastName, isAdmin: user.isAdmin },
+        user: { firstName: user.firstName, lastName: user.lastName, isAdmin: user.isAdmin, email: user.email },
         token: token,
       });
     });
@@ -113,6 +114,19 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }

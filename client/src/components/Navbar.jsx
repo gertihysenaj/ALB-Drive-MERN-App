@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import Logo from "../images/logo/logo.png";
 import LanguageSwitcher from './LanguageSwitcher';
+import UserBookings from './UserBookings'; // Import the UserBookings component
+
 
 function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser, isAdmin, handleLogout }) {
   const [nav, setNav] = useState(false);
@@ -140,8 +142,19 @@ function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser, isAdmin, handleLogou
                 Contact
               </Link>
             </li>
+
+            {isLoggedIn && user && (
+              <li>
+                <Link className="booking-link" to="/user-bookings">
+                  My Bookings
+                </Link>
+              </li>
+            )}
           </ul>
+          
           <div className="navbar__buttons">
+
+
 
             {isLoggedIn && user ? (
               <div className="dropdown">

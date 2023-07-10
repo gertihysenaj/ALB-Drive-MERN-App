@@ -1996,6 +1996,26 @@ footer {
   color: white;
   font-weight: 700;
 }
+.button-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  color: white;
+  font-weight: bold;
+}
+
+.selected-car-model {
+  font-size: 20px; /* Adjust the font size as per your preference */
+  font-weight: bold;
+  color:#fd3a1c;
+
+}
+
 
 .team-container {
   display: grid;

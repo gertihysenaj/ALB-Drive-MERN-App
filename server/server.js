@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
+const User = require('./models/user.model');
+
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json());
@@ -51,11 +53,34 @@ app.get('/api/verify', (req, res) => {
       const user = {
         id: decodedPayload.user.id,
         firstName: decodedPayload.user.firstName,
-        lastName: decodedPayload.user.lastName
+        lastName: decodedPayload.user.lastName,
+        email: decodedPayload.user.email
       };
       res.json({ isLoggedIn: true, user, isAdmin: decodedPayload.user.isAdmin });
     } else {
       return res.json({ isLoggedIn: false });
+    }
+  });
+});
+
+// Get user data route
+
+app.get('/api/users/:id', async (req, res) => {
+  const token = req.cookies.token;
+  
+  jwt.verify(token, jwtSecret, async (err, decoded) => {
+    if (err) {
+      // The token was invalid or expired.
+      res.status(401).json({ message: 'Unauthorized' });
+    } else {
+      // Get user by ID
+      const user = await User.findById(req.params.id);
+      
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
     }
   });
 });

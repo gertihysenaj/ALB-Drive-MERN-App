@@ -1,10 +1,5 @@
 import React from "react";
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 
-import CheckoutForm from './CheckoutForm';
-
-const stripePromise = loadStripe('pk_test_51NMtCwAZgL2TxpbyteMi0Vbr3rcCTuFyx8fU7u8SidcNy0IRBebOzIvSgLlyYOBhWGSHUulY8xcBqXJlhbTqXlQQ009uT9bzCQ');
 
 const BookingModal = ({
   carType,
@@ -14,6 +9,7 @@ const BookingModal = ({
   pickTime,
   dropTime,
   img,
+  user,
   name,
   setName,
   lastName,
@@ -31,17 +27,9 @@ const BookingModal = ({
   zipcode,
   setZipCode,
   confirmBooking,
-  clientSecret,
   modal,
   openModal
 }) => {
-  const handleName = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleLastName = (e) => {
-    setLastName(e.target.value);
-  };
 
   const handlePhone = (e) => {
     setPhone(e.target.value);
@@ -51,9 +39,6 @@ const BookingModal = ({
     setAge(e.target.value);
   };
 
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-  };
 
   const handleAddress = (e) => {
     setAddress(e.target.value);
@@ -69,7 +54,7 @@ const BookingModal = ({
 
   const imgUrl = car ? `http://localhost:8000/${car.img.replace('\\', '/')}` : '';
 
-  console.log(imgUrl);
+//   console.log(imgUrl);
 
   return (
     <div className={`booking-modal ${modal ? "active-modal" : ""}`}>
@@ -153,11 +138,9 @@ const BookingModal = ({
                 </label>
                 <input
                   value={name}
-                  onChange={handleName}
+                  readOnly
                   type="text"
-                  placeholder="Enter your first name"
                 ></input>
-                <p className="error-modal">This field is required.</p>
               </span>
 
               <span>
@@ -166,11 +149,9 @@ const BookingModal = ({
                 </label>
                 <input
                   value={lastName}
-                  onChange={handleLastName}
+                  readOnly
                   type="text"
-                  placeholder="Enter your last name"
                 ></input>
-                <p className="error-modal ">This field is required.</p>
               </span>
 
               <span>
@@ -194,7 +175,7 @@ const BookingModal = ({
                   value={age}
                   onChange={handleAge}
                   type="number"
-                  placeholder="18"
+                  placeholder="18+"
                 ></input>
                 <p className="error-modal ">This field is required.</p>
               </span>
@@ -207,11 +188,9 @@ const BookingModal = ({
                 </label>
                 <input
                   value={email}
-                  onChange={handleEmail}
+                  readOnly
                   type="email"
-                  placeholder="Enter your email address"
                 ></input>
-                <p className="error-modal">This field is required.</p>
               </span>
 
               <span>
@@ -263,12 +242,6 @@ const BookingModal = ({
             </span>
 
 
-      {/* <div className="booking-modal__payment-info">
-        <h4>Payment Information</h4>
-        <Elements stripe={stripePromise}>
-          <CheckoutForm clientSecret={clientSecret} />
-        </Elements>
-      </div> */}
       <div className="reserve-button">
         <button onClick={confirmBooking}>Reserve Now</button>
       </div>

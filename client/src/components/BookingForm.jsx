@@ -48,7 +48,7 @@ const BookingForm = ({
         </label>
         {car ?
           <>
-            <div>{car.mark} {car.model}</div>
+            <div className="selected-car-model">{car.mark} {car.model}</div>
             <img src={`http://localhost:8000/${(car.img ?? '').replace('\\', '/')}`} alt={car.model} />
             <button onClick={() => navigate('/models')}>
               Select another car

@@ -3,8 +3,6 @@ const Payment = require('../models/payment.model');
 const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
 
-
-
 // Create a new booking and initiate a payment
 exports.createBooking = async (req, res) => {
     console.log('Request body:', req.body);
@@ -40,12 +38,14 @@ exports.createBooking = async (req, res) => {
 // Get all bookings for a user
 exports.getBookingsByUserId = async (req, res) => {
     try {
-        const bookings = await Booking.find({ userId: req.params.userId });
+        const bookings = await Booking.find({ userId: req.params.userId }).populate('car');
         res.status(200).json({
             success: true,
             data: bookings
         });
     } catch (err) {
+        console.log(err);
+
         res.status(400).json({
             success: false,
             error: err.message
@@ -74,3 +74,4 @@ exports.deleteBooking = async (req, res) => {
         });
     }
 };
+

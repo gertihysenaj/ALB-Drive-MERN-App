@@ -14,10 +14,12 @@ import Register from './Pages/Register';
 import CarForm from './Pages/CarForm';
 import EditCar from './Pages/EditCar';
 import BookCarPage from './Pages/BookCarPage';
+import UserBookingsPage from './Pages/UserBookingsPage.jsx';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import Banner from './components/Banner';
 import './dist/styles.css';
 import i18n from 'i18next';
+
 
 axios.defaults.withCredentials = true;
 
@@ -26,6 +28,10 @@ axios.defaults.withCredentials = true;
 
 function AdminRoute({children, isAdmin}) {
   return isAdmin ? children : <Navigate to="/login" replace />
+}
+
+function UserRoute({ children, isLoggedIn }) {
+  return isLoggedIn ? children : <Navigate to="/login" replace />
 }
 
 
@@ -87,6 +93,7 @@ function App() {
         <Route path="/create-car" element={<AdminRoute isAdmin={isAdmin}><CarForm /></AdminRoute>} />
         <Route path="/edit-car/:id" element={<AdminRoute isAdmin={isAdmin}><EditCar /></AdminRoute>} />
         <Route path="/book/:carID" element={<BookCarPage />} />
+        <Route path="/user-bookings" element={<UserRoute isLoggedIn={isLoggedIn}><UserBookingsPage user={user} /></UserRoute>} />
         <Route path="testimonials" element={<TestimonialsPage />} />
         <Route path="team" element={<Team />} />
         <Route path="contact" element={<Contact />} />
