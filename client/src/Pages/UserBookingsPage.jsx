@@ -1,13 +1,15 @@
 import React from 'react';
 import UserBookings from '../components/UserBookings';
+import HeroPages from "../components/HeroPages";
+
 
 const UserBookingsPage = ({ user }) => {
     return (
-        <Selection>
+        <Section>
             <HeroPages name="Testimonials" />
             <h1>Your Bookings</h1>
             <UserBookings user={user} />
-        </Selection>
+        </Section>
     );
 };
 

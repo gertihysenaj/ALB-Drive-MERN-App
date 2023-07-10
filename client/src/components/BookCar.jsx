@@ -7,7 +7,7 @@ import BookingForm from "./BookingForm";
 import BookingModal from "./BookingModal";
 
 const BookCar = () => {
-  const [modal, setModal] = useState(false); // Controls the visibility of the booking modal
+  const [modal, setModal] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [carType, setCarType] = useState("");
