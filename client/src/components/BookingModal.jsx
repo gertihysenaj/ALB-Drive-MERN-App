@@ -77,10 +77,7 @@ const BookingModal = ({
                 <i className="fa-solid fa-location-dot"></i>
                 <div>
                   <h6>Pick-Up Date & Time</h6>
-                  <p>
-                    {pickTime} /{" "}
-                    <input type="time" className="input-time"></input>
-                  </p>
+                  <p>{new Date(pickTime).toLocaleDateString()}</p>
                 </div>
               </span>
             </div>
@@ -90,10 +87,7 @@ const BookingModal = ({
                 <i className="fa-solid fa-location-dot"></i>
                 <div>
                   <h6>Drop-Off Date & Time</h6>
-                  <p>
-                    {dropTime} /{" "}
-                    <input type="time" className="input-time"></input>
-                  </p>
+                  <p>{new Date(dropTime).toLocaleDateString()}</p>
                 </div>
               </span>
             </div>

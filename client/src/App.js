@@ -15,6 +15,7 @@ import CarForm from './Pages/CarForm';
 import EditCar from './Pages/EditCar';
 import BookCarPage from './Pages/BookCarPage';
 import UserBookingsPage from './Pages/UserBookingsPage.jsx';
+import AdminBookingsPage from './Pages/AdminBookingsPage.jsx';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import Banner from './components/Banner';
 import './dist/styles.css';
@@ -94,6 +95,7 @@ function App() {
         <Route path="/edit-car/:id" element={<AdminRoute isAdmin={isAdmin}><EditCar /></AdminRoute>} />
         <Route path="/book/:carID" element={<BookCarPage />} />
         <Route path="/user-bookings" element={<UserRoute isLoggedIn={isLoggedIn}><UserBookingsPage user={user} /></UserRoute>} />
+        <Route path="/admin-bookings" element={<AdminRoute isAdmin={isAdmin}><AdminBookingsPage isAdmin={isAdmin}/></AdminRoute>} />
         <Route path="testimonials" element={<TestimonialsPage />} />
         <Route path="team" element={<Team />} />
         <Route path="contact" element={<Contact />} />

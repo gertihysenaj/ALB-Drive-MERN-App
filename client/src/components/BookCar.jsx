@@ -150,7 +150,7 @@ const BookCar = () => {
             <div className="book-content__box">
               <h2>Reservo nje makine</h2>
               <p className="error-message">All fields required! <i className="fa-solid fa-xmark"></i></p>
-              <p className="booking-done">Check your email to confirm an order. <i onClick={hideMessage} className="fa-solid fa-xmark"></i></p>
+              <p className="booking-done">Confirmed, thank you. Check your Bookings to proceed forward with the payment . <i onClick={hideMessage} className="fa-solid fa-xmark"></i></p>
               <BookingForm
                 selectedCar={selectedCar}
                 carType={carType}

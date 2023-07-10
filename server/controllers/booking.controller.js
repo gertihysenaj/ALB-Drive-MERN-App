@@ -8,7 +8,17 @@ exports.createBooking = async (req, res) => {
     console.log('Request body:', req.body);
 
     try {
-        const booking = new Booking(req.body);
+        const { userId, carId, startDate, endDate, totalPrice, pickUp, dropOff } = req.body;
+        const booking = new Booking({
+            userId,
+            carId,
+            startDate,
+            endDate,
+            totalPrice,
+            pickUp,
+            dropOff
+        });
+
         console.log('Booking object:', booking);
 
         await booking.save();
@@ -33,6 +43,12 @@ exports.createBooking = async (req, res) => {
             error: err.message
         });
     }
+};
+
+exports.getAllBookings = async (req, res) => {
+    // Fetch all bookings from database and send them in response
+    const bookings = await Booking.find({});
+    res.json(bookings);
 };
 
 // Get all bookings for a user

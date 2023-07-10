@@ -5,11 +5,13 @@ import HeroPages from "../components/HeroPages";
 
 const UserBookingsPage = ({ user }) => {
     return (
-        <Section>
-            <HeroPages name="Testimonials" />
-            <h1>Your Bookings</h1>
-            <UserBookings user={user} />
-        </Section>
+        <>
+            <section>
+                <HeroPages name="My Bookings" />
+                <UserBookings user={user} />
+            </section>
+        </>
+
     );
 };
 

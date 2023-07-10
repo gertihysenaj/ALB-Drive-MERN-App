@@ -145,13 +145,19 @@ function Navbar({ isLoggedIn, user, setIsLoggedIn, setUser, isAdmin, handleLogou
 
             {isLoggedIn && user && (
               <li>
-                <Link className="booking-link" to="/user-bookings">
-                  My Bookings
-                </Link>
+                {isAdmin === true ? (
+                  <Link className="booking-link" to="/admin-bookings">
+                    Admin Bookings
+                  </Link>
+                ) : (
+                  <Link className="booking-link" to="/user-bookings">
+                    My Bookings
+                  </Link>
+                )}
               </li>
             )}
           </ul>
-          
+
           <div className="navbar__buttons">
 
 

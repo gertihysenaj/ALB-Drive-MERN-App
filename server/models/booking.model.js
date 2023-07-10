@@ -22,6 +22,14 @@ const BookingSchema = new mongoose.Schema({
     totalPrice: {
         type: Number,
         required: true
+    },
+    pickUp: {
+        type: String, // Adjust the data type according to your needs
+        required: true
+    },
+    dropOff: {
+        type: String, // Adjust the data type according to your needs
+        required: true
     }
 }, {
     toObject: { virtuals: true },
