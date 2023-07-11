@@ -3,12 +3,14 @@ const Payment = require('../models/payment.model');
 const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
 
-// Create a new booking and initiate a payment
+/// Create a new booking and initiate a payment
 exports.createBooking = async (req, res) => {
     console.log('Request body:', req.body);
 
     try {
-        const { userId, carId, startDate, endDate, totalPrice, pickUp, dropOff } = req.body;
+        const { userId, carId, startDate, endDate, totalPrice, pickUp, dropOff, carDetails } = req.body;
+        const { name, images, description } = carDetails;
+
         const booking = new Booking({
             userId,
             carId,
@@ -24,17 +26,51 @@ exports.createBooking = async (req, res) => {
         await booking.save();
         console.log('Booking saved');
 
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: booking.totalPrice * 100, // convert to cents
-            currency: 'usd',
-            metadata: { integration_check: 'accept_a_payment', bookingId: booking._id.toString() },
+        // Create Stripe Checkout session
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: booking.totalPrice * 100,
+                        product_data: {
+                            name: carDetails.name, 
+                            images: carDetails.images.map(image => `http://localhost:8000/${image}`), 
+                            description: carDetails.description, 
+                        },
+                        
+                    },
+                    
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `http://localhost:3000/cancel`,
+            
         });
-        console.log('Payment intent created');
+
+    
+
+
+        // Create new payment record
+        const payment = new Payment({
+            userId,
+            bookingId: booking._id,
+            stripeSessionId: session.id,
+            amount: booking.totalPrice,
+            status: 'pending',
+        });
+
+        await payment.save();
+
+        console.log('Payment record created');
 
         res.status(201).json({
             success: true,
             booking: booking,
-            client_secret: paymentIntent.client_secret
+            sessionId: session.id,  
         });
     } catch (err) {
         console.log('Error:', err.message);
@@ -44,6 +80,7 @@ exports.createBooking = async (req, res) => {
         });
     }
 };
+
 
 exports.getAllBookings = async (req, res) => {
     // Fetch all bookings from database and send them in response

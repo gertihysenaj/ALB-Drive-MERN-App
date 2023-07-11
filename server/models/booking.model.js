@@ -24,11 +24,11 @@ const BookingSchema = new mongoose.Schema({
         required: true
     },
     pickUp: {
-        type: String, // Adjust the data type according to your needs
+        type: String, 
         required: true
     },
     dropOff: {
-        type: String, // Adjust the data type according to your needs
+        type: String,
         required: true
     }
 }, {

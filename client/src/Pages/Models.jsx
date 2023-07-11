@@ -78,9 +78,6 @@ function Models({ isAdmin, carID }) {
                       </span>
                     </div>
                     <div className="models-div__box__descr__name-price__btn">
-                      {/* <Link to={`/book/${car._id}`} onClick={() => navigate('/book/' + car._id, { state: { car } })}>
-                        Reservo mjetin
-                      </Link> */}
                       <button onClick={() => navigate('/book/' + car._id, { state: { car } })} className="button-link">
                         Reserve a Car
                       </button>

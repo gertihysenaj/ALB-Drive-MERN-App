@@ -6,6 +6,9 @@ import Cookies from 'js-cookie';
 import BookingForm from "./BookingForm";
 import BookingModal from "./BookingModal";
 
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 const BookCar = () => {
   const [modal, setModal] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
@@ -37,17 +40,15 @@ const BookCar = () => {
       })
       .catch((err) => console.error(err));
   }, [carID]);
-  
+
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // Call to the new endpoint that verifies the token and returns the user data.
         const response = await axios.get('http://localhost:8000/api/verify', {
           withCredentials: true,
         });
-  
-        // Check if the response includes user data.
+
         if (response.data.isLoggedIn) {
           console.log(response.data.user)
           const user = response.data.user;
@@ -60,11 +61,11 @@ const BookCar = () => {
         console.error(err);
       }
     }
-  
+
     fetchUser();
   }, []);
-  
-  
+
+
 
   const openModal = (e) => {
     e.preventDefault();
@@ -90,16 +91,39 @@ const BookCar = () => {
     doneMsg.style.display = "none";
   };
 
+
+
+
+  async function handleCheckout(sessionId) {
+    const stripe = await stripePromise;
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: sessionId,
+    });
+
+    if (result.error) {
+      alert(result.error.message);
+    }
+}
+
+
+
+
   const confirmBooking = async (e) => {
     e.preventDefault();
-  
+
     if (!selectedCar || !user) {
       console.log('Selected car or user data is not available. Aborting booking.');
       return;
     }
-  
-    const totalPrice = selectedCar.price;
-  
+
+    const startDate = new Date(pickTime);
+    const endDate = new Date(dropTime);
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const totalPrice = selectedCar.price * diffDays;
+
+
     const bookingDetails = {
       userId: user.id,
       carId: selectedCar._id,
@@ -117,20 +141,30 @@ const BookCar = () => {
       address: address,
       city: city,
       zipcode: zipcode,
+      carDetails: {
+        name: selectedCar.mark + " " + selectedCar.model,
+        images: selectedCar.img ? [`http://localhost:8000/${selectedCar.img.replace('\\', '/')}`] : [],
+        description: "Car Rent booking"
+      }
     };
-  
+
+    console.log("Booking details:", bookingDetails);
+
+
     try {
       const response = await axios.post(
         'http://localhost:8000/api/bookings',
         bookingDetails,
         { withCredentials: true }
       );
-  
+
       if (response.data.success) {
+        const bookingId = response.data.bookingId;
         setModal(false);
         const doneMsg = document.querySelector('.booking-done');
         doneMsg.style.display = 'flex';
         setClientSecret(response.data.client_secret);
+        handleCheckout(response.data.sessionId);
       } else {
         alert('Booking failed');
       }
@@ -139,7 +173,8 @@ const BookCar = () => {
       alert('An error occurred while confirming the booking');
     }
   };
-  
+
+
 
   return (
     <>
@@ -150,7 +185,7 @@ const BookCar = () => {
             <div className="book-content__box">
               <h2>Reservo nje makine</h2>
               <p className="error-message">All fields required! <i className="fa-solid fa-xmark"></i></p>
-              <p className="booking-done">Confirmed, thank you. Check your Bookings to proceed forward with the payment . <i onClick={hideMessage} className="fa-solid fa-xmark"></i></p>
+              <p className="booking-done">Reservation added to the Bookings. Redirecting to the Payment... <i onClick={hideMessage} className="fa-solid fa-xmark"></i></p>
               <BookingForm
                 selectedCar={selectedCar}
                 carType={carType}
@@ -169,8 +204,8 @@ const BookCar = () => {
           </div>
         </div>
       </section>
-      {modal && selectedCar &&(
-          // console.log(`Image URL: http://localhost:8000/${selectedCar.img.replace('\\', '/')}`),
+      {modal && selectedCar && (
+        // console.log(`Image URL: http://localhost:8000/${selectedCar.img.replace('\\', '/')}`),
 
         <BookingModal
           carType={carType}
@@ -198,8 +233,8 @@ const BookCar = () => {
           setZipCode={setZipCode}
           confirmBooking={confirmBooking}
           clientSecret={clientSecret}
-          modal={modal}   
-          openModal={openModal}    
+          modal={modal}
+          openModal={openModal}
         />
       )}
     </>

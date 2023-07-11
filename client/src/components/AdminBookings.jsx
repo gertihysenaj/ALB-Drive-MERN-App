@@ -21,7 +21,7 @@ const AdminBookings = () => {
                         
 
 
-                        console.log('Car data for booking', booking._id, carData); // Log car data
+                        // console.log('Car data for booking', booking._id, carData);
 
                         // Combine booking and user data
                         return {

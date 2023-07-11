@@ -602,7 +602,6 @@ body {
   top: 0;
   right: 0;
 }
-
 .booking-modal {
   opacity: 0;
   display: none;
@@ -647,7 +646,7 @@ body {
   font-size: 2.5rem;
   color: rgba(255, 255, 255, 0.919);
   cursor: pointer;
-  transition: all 0.2;
+  transition: all 0.2s;
 }
 .booking-modal__title i:hover {
   color: white;
@@ -757,6 +756,78 @@ body {
   color: #ff4d30;
   margin-bottom: 2rem;
 }
+.booking-modal__person-info .info-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: white;
+  color: white;
+}
+.booking-modal__person-info .info-form__2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+.booking-modal__person-info .info-form__1col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+.booking-modal__person-info .info-form span {
+  display: flex;
+  flex-direction: column;
+}
+.booking-modal__person-info .info-form label {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #777777;
+}
+.booking-modal__person-info .info-form input {
+  height: 4rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.booking-modal__person-info .info-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.booking-modal__person-info .info-form__checkbox p {
+  font-size: 1.6rem;
+  color: #777777;
+}
+.reserve-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.reserve-button button {
+  background-color: #ff4d30;
+  color: white;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.reserve-button button:hover {
+  background-color: #ff6951;
+}
+.error-modal {
+  color: rgb(119, 107, 107);
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.error {
+  background-color: rgb(157, 118, 118);
+  border: 1px solid rgb(139, 122, 122);
+}
 
 .input-time {
   text-align: center;
@@ -811,12 +882,16 @@ body {
 }
 .info-form__2col span input, .info-form__1col span input {
   padding: 14px 15px;
-  background-color: #dbdbdb;
+  background-color: white;
   color: #555;
   font-size: 1.5rem;
   font-weight: 500;
   outline: none;
   border: none;
+}
+
+.booking-modal__person-info input[readonly] {
+  background-color: #dbdbdb;
 }
 
 .reserve-button {

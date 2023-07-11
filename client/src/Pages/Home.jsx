@@ -15,7 +15,6 @@ function Home() {
   return (
     <>
       <Hero />
-      {/* <BookCar /> */}
       <PlanTrip />
       <PickCar />
       <Banner />

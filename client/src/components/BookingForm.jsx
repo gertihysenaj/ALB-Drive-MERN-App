@@ -20,7 +20,7 @@ const BookingForm = ({
 
   useEffect(() => {
     if (car) {
-      setCarType(car); // set the entire car object
+      setCarType(car); 
     }
   }, [car, setCarType]);
 

@@ -11,10 +11,10 @@ const PaymentSchema = new mongoose.Schema({
         ref: 'Booking',
         required: true
     },
-    stripeChargeId: {
-        type: String,
-        required: true
-    },
+    // stripeChargeId: {
+    //     type: String,
+    //     required: true
+    // },
     amount: {
         type: Number,
         required: true

@@ -46,7 +46,7 @@ const UserBookings = ({ user }) => {
     
     return (
         <div>
-          <h1 className="mb-4 my-booking-title">My Bookings</h1>
+          <h1 className="mb-4 my-booking-title text-center">My Bookings</h1>
           {bookings.length > 0 ? (
             bookings.map((booking) => (
               <div key={booking.id} className="card custom-card mb-3">

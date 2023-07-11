@@ -1,47 +1,50 @@
 const Stripe = require('stripe');
 const Payment = require('../models/payment.model');
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Replace with your Stripe secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Process a payment
-exports.processPayment = async (req, res) => {
+exports.createCheckoutSession = async (req, res) => {
   try {
-    const { token, amount, userId, bookingId } = req.body;
+    const { amount, userId, bookingId } = req.body;
 
-    const paymentMethod = await stripe.paymentMethods.create({
-      type: 'card',
-      card: {
-        token,
-      },
-    });
+    // You need to provide a valid product or price ID. 
+    // You need to create a Product and a Price through the Stripe Dashboard (https://dashboard.stripe.com/test/products)
+    // or via the API. More details: https://stripe.com/docs/api/prices/object
+    const priceId = 'your_price_id'; 
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-      payment_method: paymentMethod.id,
-      confirm: true,
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:3000/cancel`,
     });
 
     const payment = new Payment({
       userId,
       bookingId,
-      stripeChargeId: paymentIntent.id,
-      amount: paymentIntent.amount,
-      status: paymentIntent.status,
-      receipt_url: paymentIntent.charges.data[0].receipt_url,
+      stripeSessionId: session.id,
+      amount: amount, 
+      status: 'pending', 
     });
 
     await payment.save();
 
     res.status(200).json({
       success: true,
-      data: paymentIntent,
+      sessionId: session.id, // You'll need the session ID on the frontend to redirect to checkout
     });
   } catch (error) {
-    console.error('Error processing payment:', error);
+    console.error('Error creating checkout session:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to process payment',
+      error: 'Failed to create checkout session',
     });
   }
 };
+
 

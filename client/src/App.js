@@ -20,6 +20,9 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import Banner from './components/Banner';
 import './dist/styles.css';
 import i18n from 'i18next';
+import SuccessPage from './components/SuccessPage';
+import CancelPage from './components/CancelPage';
+
 
 
 axios.defaults.withCredentials = true;
@@ -37,10 +40,10 @@ function UserRoute({ children, isLoggedIn }) {
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [user, setUser] = React.useState(null);
-  const [isAdmin, setIsAdmin] = React.useState(false);
-  const [loading, setLoading] = React.useState(true); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
 
     const checkUserStatus = async () => {
@@ -102,6 +105,8 @@ function App() {
         <Route path="login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} checkUserStatus={checkUserStatus}/>} />
         <Route path="register" element={<Register />} />
         <Route path="banner" element={<Banner />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="/cancel" element={<CancelPage />} />
       </Routes>
     </BrowserRouter>
   );
